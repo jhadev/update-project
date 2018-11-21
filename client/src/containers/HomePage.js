@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import Jumbotron from './components/Jumbotron';
-import HomeImages from './HomeImages.json';
-import HomeCards from './components/HomeCards';
-import Popover from 'react-tiny-popover';
+import Jumbotron from '../components/Jumbotron';
+import HomeImages from '../HomeImages.json';
+import HomeCards from '../components/HomeCards';
 
 
 class HomePage extends Component {
   state = {
-    HomeImages,
-    isOpen: false
+    HomeImages
   }
   render() {
     return (
@@ -20,18 +18,13 @@ class HomePage extends Component {
           <div className="col">
             <div className="card-group">
               {this.state.HomeImages.map(image => (
-                <Popover
-                  isOpen={this.state.isOpen}
-                  position={'top'}
-                  content = {(<div>{image.body}</div>)}
-                >
+      
                 <HomeCards
-                  onClick = {() => this.setState({ isOpen: true})}
                   key={image.name}
                   image={image.image}
                   name={image.name}
                 />
-                </Popover>
+
               ))}
             </div>
           </div>
