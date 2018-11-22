@@ -31,7 +31,7 @@ class Login extends Component {
   render() {
     // If user is logged in, take them to main page
     if (this.state.isLoggedIn) {
-      return <Redirect to="/" />;
+      return <Redirect to="/dash" />;
     }
 
     return (
