@@ -1,8 +1,12 @@
-.navbar {
+.layer {
   background: transparent;
 }
 
 .navbar-brand {
   font-size: 30px;
   font-family: 'Righteous', cursive;
+}
+
+.nv {
+  box-shadow: 0 3px 5px rgb(184, 183, 183), 0 3px 5px rgb(184, 183, 183);
 }
