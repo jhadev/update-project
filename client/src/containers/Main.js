@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import SideNav from "../components/SideNav";
 import API from "../utils/API";
+import { Chart } from "primereact/chart";
 import { withStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
@@ -61,10 +62,10 @@ class Main extends Component {
     date: "",
     income: false,
     budget: {},
-    bookQuery: "",
-    bookList: [],
+    categoryRange: "",
     activePageHeader: "Dashboard",
-    activePage: "Search"
+    activePage: "Search",
+    arrayForPieChart: []
   };
 
   // Check login status on load
@@ -75,11 +76,16 @@ class Main extends Component {
   // Check login status
   loginCheck = () => {
     API.loginCheck()
-      .then(res =>
+      .then(res => 
         this.setState({
           isLoggedIn: res.data.isLoggedIn,
           username: res.data.username
+        
         })
+      )
+      .then( res => {
+        this.getCategorySum();
+      }
       )
       .catch(err => {
         console.log(err);
@@ -87,18 +93,43 @@ class Main extends Component {
       });
   };
 
+  getCategorySum = () => {
+    API
+      .getSumByCategory()
+      .then(res =>{
+        console.log(
+          "SUM BY CATEGORY DATA" +
+          JSON.stringify(res.data)
+        );
+
+        const categorySumList = res.data.map(function (category) {
+          return category.categoryTotal;
+        })
+
+        console.log("CATEGORY SUM LIST ARRAY: " + 
+        JSON.stringify(categorySumList))
+
+        this.setState({arrayForPieChart: categorySumList})
+        console.log("ARRAY FOR PIE CHART: " +  this.state.arrayForPieChart);
+      })
+  }
+
   handleInputChange = event => {
     const { name, value } = event.target;
-   
 
     this.setState({
       [name]: value
     });
   };
 
+  handleChange = event => {
+    const { name, value } = event.target
+    this.setState({ [name]: value });
+  };
+
   handleFormSubmit = event => {
     event.preventDefault();
-    console.log("this")
+    console.log("this");
     /*if (
       this.state.description &&
       this.state.amount &&
@@ -113,11 +144,21 @@ class Main extends Component {
         income: this.state.income,
         category: this.state.category
       })
-        .then(res => console.log(res))
+        .then(res => { 
+          console.log(res)
+          // this.setState({
+          //   description: "",
+          //   amount: "",
+          //   date: "",
+          //   income: "",
+          //   income: "",
+          //   category: ""})
+        })
         .catch(err => console.log(err));
     }
   };
-
+  
+  
   handleSearch = event => {
     event.preventDefault();
 
@@ -135,6 +176,43 @@ class Main extends Component {
   };
 
   render() {
+    const pieData = {
+      labels: ["Home", "Utilities"],
+      datasets: [
+        {
+          data: this.state.arrayForPieChart,
+          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+          hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
+        }
+      ]
+    };
+
+    const radarData = {
+      labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
+      datasets: [
+          {
+              label: 'My First dataset',
+              backgroundColor: 'rgba(179,181,198,0.2)',
+              borderColor: 'rgba(179,181,198,1)',
+              pointBackgroundColor: 'rgba(179,181,198,1)',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: 'rgba(179,181,198,1)',
+              data: [65, 59, 90, 81, 56, 55, 40]
+          },
+          {
+              label: 'My Second dataset',
+              backgroundColor: 'rgba(255,99,132,0.2)',
+              borderColor: 'rgba(255,99,132,1)',
+              pointBackgroundColor: 'rgba(255,99,132,1)',
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: 'rgba(255,99,132,1)',
+              data: [28, 48, 40, 19, 96, 27, 100]
+          }
+      ]
+  };
+
     // If user isn't logged in, don't let them see this page
     if (!this.state.isLoggedIn) {
       return <Redirect to="/login" />;
@@ -144,6 +222,21 @@ class Main extends Component {
     return (
       <div className={classes.root}>
         <CssBaseline />
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="Open drawer"
+              onClick={this.handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" color="inherit" noWrap>
+              {this.state.activePageHeader}
+            </Typography>
+          </Toolbar>
+        </AppBar>
         <nav className={classes.drawer}>
           <Hidden smUp implementation="css">
             <Drawer
@@ -185,16 +278,17 @@ class Main extends Component {
         </nav>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <div className="mdc-form-field">
-            <div className="mdc-checkbox">
-              <input
-                type="checkbox"
-                id="my-checkbox"
-                className="mdc-checkbox__native-control"
-              />
-              <div className="mdc-checkbox__background">...</div>
+          <div className="row">
+            <div className="col-md-6">
+              <div className="content-section implementation">
+                <Chart type="pie" data={pieData} />
+              </div>
             </div>
-            <label for="my-checkbox">This is my checkbox</label>
+            <div className="col-md-6">
+              <div className="content-section implementation">
+                <Chart type="radar" data={radarData} />
+              </div>
+            </div>
           </div>
         </main>
       </div>

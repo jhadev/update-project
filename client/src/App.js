@@ -8,12 +8,10 @@ import "./App.css";
 
 //import Dashboard from "./containers/Dashboard";
 
-import Navbar from "./components/Navbar";
 
 const App = () => (
   <Router>
     <div className="background">
-      <Navbar/>
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/dash" component={Main} />

@@ -11,6 +11,9 @@ import BookIcon from "@material-ui/icons/Book";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import InputAdornment from '@material-ui/core/InputAdornment';
+import MenuItem from '@material-ui/core/MenuItem';
+import classNames from 'classnames';
 
 const styles = theme => ({
   container: {
@@ -30,17 +33,32 @@ const styles = theme => ({
   }
 });
 
+const categories = [
+  {
+    value: 'Income',
+    label: 'Income',
+  },
+  {
+    value: 'Home',
+    label: 'Home',
+  },
+  {
+    value: 'Travel',
+    label: 'Travel',
+  },
+];
+
 const SideNav = props => {
   const { classes } = props;
   return (
-    <div style={{marginTop: 50}} className="top">
+    <div style={{ marginTop: 50 }} className="top">
       <Typography align="center" variant="h2" color="textPrimary">
         Curren$ee
       </Typography>
       <Divider />
 
       <List>
-        <Link to={`/charts`}>
+        <Link to={`/search`}>
           <ListItem
             selected={props.activePage === "Charts" ? true : false}
             button
@@ -51,7 +69,7 @@ const SideNav = props => {
             <ListItemText primary={"Charts"} />
           </ListItem>
         </Link>
-        <Link to={`/table`}>
+        <Link to={`/saved`}>
           <ListItem
             selected={props.activePage === "Table" ? true : false}
             button
@@ -101,6 +119,27 @@ const SideNav = props => {
             margin="normal"
             name="category"
           />
+          {/* <TextField
+            select
+            className={classNames(classes.margin, classes.textField)}
+            variant="filled"
+            label="With Select"
+            value={props.category}
+            onChange={() => props.handleChange('category')}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment variant="filled" position="start">
+                  Category
+                </InputAdornment>
+              )
+            }}
+          >
+            {categories.map(option => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField> */}
           <TextField
             id="standard-date"
             label="Date"

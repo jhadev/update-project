@@ -84,7 +84,7 @@ module.exports = {
          {
            $group : {
               _id : { income: "$income" , month: { $substrBytes: ["$date", 0, 2] }},
-              totalPrice: { $sum: "$amount" }
+              budgetTotal: { $sum: "$amount" }
            }
          }
       ]
@@ -95,6 +95,7 @@ module.exports = {
   sumByCategory: function(req, res) {
     db.Budget.aggregate([
       { $match: { userID: req.user._id } },
+      { $sort : { category: -1 } },
        {
          $group : {
             _id : { income: "$income" , category: "$category", month: { $substrBytes: ["$date", 0, 2] }},
