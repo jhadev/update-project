@@ -1,0 +1,14 @@
+.dashtext {
+  font-family: 'Righteous', cursive;
+  font-size: 20px;
+}
+
+.table-data {
+  font-size: 16px;
+}
+
+.highlight {
+  background-color: rgb(244, 66, 78, 0.2);
+  padding: 2px;
+}
+

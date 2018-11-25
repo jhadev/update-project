@@ -20,8 +20,10 @@ module.exports = {
           category: 1,
           date: 1,
           userID: 1,
-          month: { $substrBytes: ["$date", 0, 2] }
-        }
+          month: { $substrBytes: ["$date", 0, 2] },
+          convertedIncome: { $toString: "$income" }
+        },
+
       }
     ])
       .then(dbModel => res.json(dbModel))

@@ -11,10 +11,8 @@ import BookIcon from "@material-ui/icons/Book";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import InputAdornment from '@material-ui/core/InputAdornment';
-import MenuItem from '@material-ui/core/MenuItem';
-import classNames from 'classnames';
 import RadioButtonsGroup from '../components/RadioButtonsGroup';
+import './SideNav.css'
 
 const styles = theme => ({
   container: {
@@ -34,27 +32,12 @@ const styles = theme => ({
   }
 });
 
-const categories = [
-  {
-    value: 'Income',
-    label: 'Income',
-  },
-  {
-    value: 'Home',
-    label: 'Home',
-  },
-  {
-    value: 'Travel',
-    label: 'Travel',
-  },
-];
-
 const SideNav = props => {
   const { classes } = props;
   return (
-    <div style={{ marginTop: 50 }} className="top">
-      <Typography align="center" variant="h2" color="textPrimary">
-        Curren$ee
+    <div className="top">
+      <Typography className="logo" align="center" variant="p" color="textPrimary">
+        curren$ee
       </Typography>
       <Divider />
 
@@ -158,7 +141,7 @@ const SideNav = props => {
                 props.description &&
                 props.amount &&
                 props.date &&
-                props.income
+                props.category
               )
             }*/
             variant="outlined"

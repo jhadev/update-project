@@ -13,8 +13,10 @@ import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
 import IconButton from "@material-ui/core/IconButton";
 import "typeface-roboto";
-import {DataTable, Column} from 'primereact/datatable';
-
+import { DataTable, Column } from "primereact/datatable";
+import "./Main.css";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 
 const drawerWidth = 300;
 
@@ -50,7 +52,6 @@ const styles = theme => ({
   }
 });
 
-
 class Main extends Component {
   state = {
     isLoggedIn: true,
@@ -63,7 +64,6 @@ class Main extends Component {
     amount: 0,
     category: "",
     date: "",
-    income: false,
     budget: {},
     categoryRange: "",
     activePageHeader: "Dashboard",
@@ -97,18 +97,19 @@ class Main extends Component {
   };
 
   getBudgetTable = () => {
-    API.getBudget().then(res => {
+    API.getMonth().then(res => {
       // console.log("BUDGET DATA" + JSON.stringify(res.data));
 
-      this.setState({arrayForBudgetTable: res.data})
-      console.log("ARRAY FOR BUDGET DATA: " + JSON.stringify(this.state.arrayForBudgetTable));
+      this.setState({ arrayForBudgetTable: res.data });
+      console.log(
+        "ARRAY FOR BUDGET DATA: " +
+          JSON.stringify(this.state.arrayForBudgetTable)
+      );
     });
   };
 
   getCategorySum = () => {
-    API
-      .getSumByCategory()
-      .then(res => {
+    API.getSumByCategory().then(res => {
       // console.log("SUM BY CATEGORY DATA" + JSON.stringify(res.data));
 
       const categorySumList = res.data.map(function(category) {
@@ -121,9 +122,8 @@ class Main extends Component {
 
       this.setState({ arrayForPieChart: categorySumList });
       // console.log("ARRAY FOR PIE CHART: " + this.state.arrayForPieChart)
-      
     });
-    }
+  };
 
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -141,13 +141,13 @@ class Main extends Component {
   handleFormSubmit = event => {
     event.preventDefault();
     console.log("this");
-    /*if (
+    if (
       this.state.description &&
       this.state.amount &&
       this.state.date &&
       this.state.income &&
       this.state.category
-    )*/ {
+    ) {
       API.budgetPost({
         description: this.state.description,
         amount: this.state.amount,
@@ -183,6 +183,12 @@ class Main extends Component {
       .catch(err => {
         console.log(err);
       });
+  };
+
+  rowClassName = rowData => {
+    let incomeRow = rowData.convertedIncome;
+
+    return { highlight: incomeRow === "false" };
   };
 
   render() {
@@ -240,7 +246,7 @@ class Main extends Component {
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
+        <AppBar position="fixed" color="inherit" className={classes.appBar}>
           <Toolbar>
             <IconButton
               color="inherit"
@@ -250,7 +256,7 @@ class Main extends Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
+            <Typography variant="p" className="dashtext" color="inherit" noWrap>
               {this.state.activePageHeader}
             </Typography>
           </Toolbar>
@@ -308,19 +314,64 @@ class Main extends Component {
               </div>
             </div>
           </div>
-          <br>
-          </br>
-          <br>
-          </br>
-          <div className="row my-6">
-            <div className=" col-12">
+          <br />
+          <br />
+          <div className="row justify-content-center">
+            <div className="col-12">
               {/* BUDGET TABLE */}
-              <DataTable className="justify-content-center" tableStyle={{width: 'auto'}} value={this.state.arrayForBudgetTable}>
-                <Column field="date" header="Date" />
-                <Column field="description" header="Description" />
-                <Column field="amount" header="Amount" />
-                <Column field="category" header="Category" />
-            </DataTable>
+              <Card className={classes.card}>
+                <CardContent>
+                  <Typography
+                    className="dashtext"
+                    variant="p"
+                    color="textPrimary"
+                    gutterBottom
+                  >
+                    Budget Table
+                  </Typography>
+                  <Typography
+                    className={classes.title}
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Click on Date or Amount to sort
+                  </Typography>
+                  <DataTable
+                    className="budget-table"
+                    tableStyle={{ width: "100%" }}
+                    value={this.state.arrayForBudgetTable}
+                    rowClassName={this.rowClassName}
+                  >
+                    <Column
+                      className="table-data"
+                      field="date"
+                      sortable="true"
+                      header="Date"
+                    />
+                    <Column
+                      className="table-data"
+                      field="description"
+                      header="Description"
+                    />
+                    <Column
+                      className="table-data"
+                      field="amount"
+                      sortable="true"
+                      header="Amount"
+                    />
+                    <Column
+                      className="table-data"
+                      field="category"
+                      header="Category"
+                    />
+                    <Column
+                      className="table-data"
+                      field="convertedIncome"
+                      header="Income"
+                    />
+                  </DataTable>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </main>
