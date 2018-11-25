@@ -39,6 +39,9 @@ export default {
     return axios.get(`${'https://cors-anywhere.herokuapp.com/'}https://api.walmartlabs.com/v1/search?apiKey=4vqcppc7kjbk8zsktvkry97c&query=${searchTerm}`)
   },
 
+  getBudget: function() {
+    return axios.get('api/budget')
+  },
   getMonth: function() {
     return axios.get('api/budget/month')
   },

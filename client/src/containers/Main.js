@@ -13,6 +13,8 @@ import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
 import IconButton from "@material-ui/core/IconButton";
 import "typeface-roboto";
+import {DataTable, Column} from 'primereact/datatable';
+
 
 const drawerWidth = 300;
 
@@ -48,6 +50,7 @@ const styles = theme => ({
   }
 });
 
+
 class Main extends Component {
   state = {
     isLoggedIn: true,
@@ -65,7 +68,8 @@ class Main extends Component {
     categoryRange: "",
     activePageHeader: "Dashboard",
     activePage: "Search",
-    arrayForPieChart: []
+    arrayForPieChart: [],
+    arrayForBudgetTable: []
   };
 
   // Check login status on load
@@ -76,43 +80,50 @@ class Main extends Component {
   // Check login status
   loginCheck = () => {
     API.loginCheck()
-      .then(res => 
+      .then(res =>
         this.setState({
           isLoggedIn: res.data.isLoggedIn,
           username: res.data.username
-        
         })
       )
-      .then( res => {
+      .then(res => {
         this.getCategorySum();
-      }
-      )
+        this.getBudgetTable();
+      })
       .catch(err => {
         console.log(err);
         this.setState({ isLoggedIn: false });
       });
   };
 
+  getBudgetTable = () => {
+    API.getBudget().then(res => {
+      // console.log("BUDGET DATA" + JSON.stringify(res.data));
+
+      this.setState({arrayForBudgetTable: res.data})
+      console.log("ARRAY FOR BUDGET DATA: " + JSON.stringify(this.state.arrayForBudgetTable));
+    });
+  };
+
   getCategorySum = () => {
     API
       .getSumByCategory()
-      .then(res =>{
-        console.log(
-          "SUM BY CATEGORY DATA" +
-          JSON.stringify(res.data)
-        );
+      .then(res => {
+      // console.log("SUM BY CATEGORY DATA" + JSON.stringify(res.data));
 
-        const categorySumList = res.data.map(function (category) {
-          return category.categoryTotal;
-        })
+      const categorySumList = res.data.map(function(category) {
+        return category.categoryTotal;
+      });
 
-        console.log("CATEGORY SUM LIST ARRAY: " + 
-        JSON.stringify(categorySumList))
+      console.log(
+        "CATEGORY SUM LIST ARRAY: " + JSON.stringify(categorySumList)
+      );
 
-        this.setState({arrayForPieChart: categorySumList})
-        console.log("ARRAY FOR PIE CHART: " +  this.state.arrayForPieChart);
-      })
-  }
+      this.setState({ arrayForPieChart: categorySumList });
+      // console.log("ARRAY FOR PIE CHART: " + this.state.arrayForPieChart)
+      
+    });
+    }
 
   handleInputChange = event => {
     const { name, value } = event.target;
@@ -123,7 +134,7 @@ class Main extends Component {
   };
 
   handleChange = event => {
-    const { name, value } = event.target
+    const { name, value } = event.target;
     this.setState({ [name]: value });
   };
 
@@ -144,8 +155,8 @@ class Main extends Component {
         income: this.state.income,
         category: this.state.category
       })
-        .then(res => { 
-          console.log(res)
+        .then(res => {
+          console.log(res);
           // this.setState({
           //   description: "",
           //   amount: "",
@@ -157,8 +168,7 @@ class Main extends Component {
         .catch(err => console.log(err));
     }
   };
-  
-  
+
   handleSearch = event => {
     event.preventDefault();
 
@@ -188,30 +198,38 @@ class Main extends Component {
     };
 
     const radarData = {
-      labels: ['Eating', 'Drinking', 'Sleeping', 'Designing', 'Coding', 'Cycling', 'Running'],
+      labels: [
+        "Eating",
+        "Drinking",
+        "Sleeping",
+        "Designing",
+        "Coding",
+        "Cycling",
+        "Running"
+      ],
       datasets: [
-          {
-              label: 'My First dataset',
-              backgroundColor: 'rgba(179,181,198,0.2)',
-              borderColor: 'rgba(179,181,198,1)',
-              pointBackgroundColor: 'rgba(179,181,198,1)',
-              pointBorderColor: '#fff',
-              pointHoverBackgroundColor: '#fff',
-              pointHoverBorderColor: 'rgba(179,181,198,1)',
-              data: [65, 59, 90, 81, 56, 55, 40]
-          },
-          {
-              label: 'My Second dataset',
-              backgroundColor: 'rgba(255,99,132,0.2)',
-              borderColor: 'rgba(255,99,132,1)',
-              pointBackgroundColor: 'rgba(255,99,132,1)',
-              pointBorderColor: '#fff',
-              pointHoverBackgroundColor: '#fff',
-              pointHoverBorderColor: 'rgba(255,99,132,1)',
-              data: [28, 48, 40, 19, 96, 27, 100]
-          }
+        {
+          label: "My First dataset",
+          backgroundColor: "rgba(179,181,198,0.2)",
+          borderColor: "rgba(179,181,198,1)",
+          pointBackgroundColor: "rgba(179,181,198,1)",
+          pointBorderColor: "#fff",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(179,181,198,1)",
+          data: [65, 59, 90, 81, 56, 55, 40]
+        },
+        {
+          label: "My Second dataset",
+          backgroundColor: "rgba(255,99,132,0.2)",
+          borderColor: "rgba(255,99,132,1)",
+          pointBackgroundColor: "rgba(255,99,132,1)",
+          pointBorderColor: "#fff",
+          pointHoverBackgroundColor: "#fff",
+          pointHoverBorderColor: "rgba(255,99,132,1)",
+          data: [28, 48, 40, 19, 96, 27, 100]
+        }
       ]
-  };
+    };
 
     // If user isn't logged in, don't let them see this page
     if (!this.state.isLoggedIn) {
@@ -288,6 +306,21 @@ class Main extends Component {
               <div className="content-section implementation">
                 <Chart type="radar" data={radarData} />
               </div>
+            </div>
+          </div>
+          <br>
+          </br>
+          <br>
+          </br>
+          <div className="row my-6">
+            <div className=" col-12">
+              {/* BUDGET TABLE */}
+              <DataTable className="justify-content-center" tableStyle={{width: 'auto'}} value={this.state.arrayForBudgetTable}>
+                <Column field="date" header="Date" />
+                <Column field="description" header="Description" />
+                <Column field="amount" header="Amount" />
+                <Column field="category" header="Category" />
+            </DataTable>
             </div>
           </div>
         </main>

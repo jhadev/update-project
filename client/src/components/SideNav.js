@@ -14,6 +14,7 @@ import Button from "@material-ui/core/Button";
 import InputAdornment from '@material-ui/core/InputAdornment';
 import MenuItem from '@material-ui/core/MenuItem';
 import classNames from 'classnames';
+import RadioButtonsGroup from '../components/RadioButtonsGroup';
 
 const styles = theme => ({
   container: {
@@ -150,6 +151,7 @@ const SideNav = props => {
             margin="normal"
             name="date"
           />
+          <RadioButtonsGroup />
           <Button
             /*disabled={
               !(
