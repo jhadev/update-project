@@ -236,8 +236,8 @@ class Main extends Component {
       datasets: [
         {
           data: this.state.arrayForPieChart,
-          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-          hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"]
+          backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#003366", "#F0F8FF", "#7FFFD4", "#3399FF", "#8A2BE2"],
+          hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#003366", "#F0F8FF", "#7FFFD4", "#3399FF", "#8A2BE2"]
         }
       ]
     };
@@ -247,12 +247,12 @@ class Main extends Component {
       datasets: [
         {
           label: "Income",
-          backgroundColor: "#42A5F5",
+          backgroundColor: "rgb(4, 244, 12, 0.8)",
           data: this.state.arrayForTrueIncome
         },
         {
           label: "Expense",
-          backgroundColor: "#9CCC65",
+          backgroundColor: "rgb(255, 0, 0, 0.8)",
           data: this.state.arrayForFalseIncome
         }
       ]
