@@ -67,7 +67,7 @@ class SideNav extends Component {
     this.setState({ [name]: value });
   };
 
-  handleFormSubmit = event => {
+  handleFormSubmit = (event) => {
     event.preventDefault();
     console.log("this");
     // if (
@@ -92,6 +92,17 @@ class SideNav extends Component {
         .then(res => {
           console.log(res);
           console.log("BUDGET STATE OBJECT: " + this.state.budget);
+          this.setState({ budget: budgetObject });
+          window.location.reload();
+
+          // props.getCategorySum();
+          // props.getBudgetTable();
+          // props.getBudgetSum();
+          // props.getSumByMonthFalse();
+          // props.getSumByMonthTrue();
+          // props.createMonthLabels();
+
+
           // this.setState({
           //   description: "",
           //   amount: "",
@@ -262,6 +273,7 @@ class SideNav extends Component {
               />
             </RadioGroup>
           </FormControl>
+             
           <Button
             /*disabled={
               !(
@@ -275,10 +287,12 @@ class SideNav extends Component {
             color="primary"
             className="button"
             type="submit"
-            to={`/dash`}
-            onClick={this.handleFormSubmit}
+            
+            onClick={
+              this.handleFormSubmit}
+            
           >
-            Submit Budget
+             Submit Budget 
           </Button>
         </form>
       </div>
