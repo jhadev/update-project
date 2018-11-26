@@ -246,8 +246,15 @@ class Main extends Component {
   rowClassName = rowData => {
     let incomeRow = rowData.convertedIncome;
 
-    return { highlight: incomeRow === "false" };
+    return { highlightRed: incomeRow === "false"}
   };
+
+  amountTemplate(rowData, column) {
+    let amount = rowData.amount;
+    let fontWeight = amount >= 2500 ? 'bold' : 'normal';
+    
+    return <span style={{fontWeight: fontWeight}}>{rowData.amount}</span>;
+}
 
   createMonthLabels = () => {
     const barChartLabels = [];
@@ -423,6 +430,7 @@ class Main extends Component {
                     field="amount"
                     sortable="true"
                     header="Amount"
+                    body={this.amountTemplate}
                   />
                   <Column
                     className="table-data"

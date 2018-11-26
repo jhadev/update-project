@@ -11,17 +11,17 @@ const Navbar = () => (
       <div className="collapse navbar-collapse">
         <div className="navbar-nav">
           <li className="nav-item active">
-            <NavLink className="nav-item nav-link" to="/">
+            <NavLink className=" font nav-item nav-link" to="/">
               Home
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink className="nav-link" to="/signup">
+            <NavLink className=" font nav-link" to="/signup">
               Sign Up
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink className="nav-link" to="/login">
+            <NavLink className="font nav-link" to="/login">
               Login
             </NavLink>
           </li>

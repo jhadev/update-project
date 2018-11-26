@@ -10,3 +10,8 @@
 .nv {
   box-shadow: 0 3px 5px rgb(184, 183, 183), 0 3px 5px rgb(184, 183, 183);
 }
+
+.font {
+  font-family: 'Righteous', cursive;
+  margin-top: 3px;
+}

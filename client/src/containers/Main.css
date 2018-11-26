@@ -7,8 +7,14 @@
   font-size: 16px;
 }
 
-.highlight {
+.highlightRed {
   background-color: rgb(244, 66, 78, 0.2);
+  padding: 2px;
+}
+
+.highlightGreen {
+  background-color: rgb(244, 66, 78, 0.2);
+  border: 2px solid black;
   padding: 2px;
 }
 
