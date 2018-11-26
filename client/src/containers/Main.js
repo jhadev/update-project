@@ -61,12 +61,6 @@ class Main extends Component {
     itemImages: [],
     mobileOpen: false,
     walmart: {},
-    description: "",
-    amount: 0,
-    category: "",
-    date: "",
-    income: true,
-    budget: {},
     categoryRange: "",
     activePageHeader: "Dashboard",
     activePage: "Search",
@@ -189,42 +183,6 @@ class Main extends Component {
   handleChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
-  };
-
-  handleFormSubmit = event => {
-    event.preventDefault();
-    console.log("this");
-    if (
-      this.state.description &&
-      this.state.amount &&
-      this.state.date &&
-      this.state.income &&
-      this.state.category
-    ) {
-      let budgetObject = {
-        description: this.state.description,
-        amount: this.state.amount,
-        date: this.state.date,
-        income: this.state.income,
-        category: this.state.category
-      };
-
-      this.setState({ budget: budgetObject });
-
-      API.budgetPost(budgetObject)
-        .then(res => {
-          console.log(res);
-          console.log("BUDGET STATE OBJECT: " + this.state.budget);
-          // this.setState({
-          //   description: "",
-          //   amount: "",
-          //   date: "",
-          //   income: "",
-          //   income: "",
-          //   category: ""})
-        })
-        .catch(err => console.log(err));
-    }
   };
 
   handleSearch = event => {

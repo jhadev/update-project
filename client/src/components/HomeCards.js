@@ -4,8 +4,6 @@ import './HomeCards.css';
 
 const HomeCard = (props) => {
 
-  
-
   return(
   
   <div className="card">

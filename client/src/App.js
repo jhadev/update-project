@@ -8,7 +8,6 @@ import "./App.css";
 
 //import Dashboard from "./containers/Dashboard";
 
-
 const App = () => (
   <Router>
     <div className="background">

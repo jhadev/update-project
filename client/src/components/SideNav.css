@@ -2,3 +2,23 @@
   font-family: 'Righteous', cursive;
   font-size: 40px;
 }
+
+.title {
+  font-family: 'Righteous', cursive;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: -10px;
+}
+
+.dropdownCat {
+  margin-bottom: 20px;
+}
+
+.allMargin {
+  margin-bottom: 20px;
+}
+
+.textField {
+  margin-bottom: 20px;
+}
