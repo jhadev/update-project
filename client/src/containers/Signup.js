@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 import API from "../utils/API";
 import Navbar from "../components/Navbar";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 
 class Login extends Component {
   state = {
@@ -42,42 +44,46 @@ class Login extends Component {
         <Navbar />
         <div className="container my-5">
           <div className="row justify-content-center">
-            <form>
-              <h3>Sign Up!</h3>
-              <div className="form-group">
-                <label htmlFor="username">Username</label>
-                <input
-                  type="text"
-                  name="username"
-                  value={this.state.username}
-                  onChange={this.handleInputChange}
-                  className="form-control"
-                  placeholder="Username"
-                />
-                <small id="usernameHelp" className="form-text text-muted">
-                  Enter your username
-                </small>
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input
-                  type="password"
-                  name="password"
-                  value={this.state.password}
-                  onChange={this.handleInputChange}
-                  className="form-control"
-                  placeholder="Password"
-                />
-              </div>
+            <Card className="login-card">
+              <CardContent>
+                <form>
+                  <h3>Sign Up!</h3>
+                  <div className="form-group">
+                    <label htmlFor="username">Username</label>
+                    <input
+                      type="text"
+                      name="username"
+                      value={this.state.username}
+                      onChange={this.handleInputChange}
+                      className="form-control"
+                      placeholder="Username"
+                    />
+                    <small id="usernameHelp" className="form-text text-muted">
+                      Enter your username
+                    </small>
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="password">Password</label>
+                    <input
+                      type="password"
+                      name="password"
+                      value={this.state.password}
+                      onChange={this.handleInputChange}
+                      className="form-control"
+                      placeholder="Password"
+                    />
+                  </div>
 
-              <button
-                type="submit"
-                className="btn btn-success"
-                onClick={this.register}
-              >
-                Sign Up!
-              </button>
-            </form>
+                  <button
+                    type="submit"
+                    className="btn btn-success"
+                    onClick={this.register}
+                  >
+                    Sign Up!
+                  </button>
+                </form>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

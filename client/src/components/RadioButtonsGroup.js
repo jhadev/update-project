@@ -46,7 +46,6 @@ class RadioButtonsGroup extends React.Component {
     return (
     <div className={classes.root}>
     <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">+ / -</FormLabel>
           <RadioGroup
             aria-label="Income"
             name="income"

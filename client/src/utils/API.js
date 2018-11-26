@@ -54,6 +54,14 @@ export default {
     return axios.get('api/budget/sumbymonth')
   },
 
+  getSumByMonthTrue: function() {
+    return axios.get('api/budget/sumbymonthtrue')
+  },
+
+  getSumByMonthFalse: function() {
+    return axios.get('api/budget/sumbymonthfalse')
+  },
+
   getSumByCategory: function() {
     return axios.get('api/budget/sumbycategory')
   }

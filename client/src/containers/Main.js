@@ -12,11 +12,12 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import MenuIcon from "@material-ui/icons/Menu";
 import IconButton from "@material-ui/core/IconButton";
-import "typeface-roboto";
 import { DataTable, Column } from "primereact/datatable";
 import "./Main.css";
 import Card from "@material-ui/core/Card";
+import Grid from "@material-ui/core/Grid";
 import CardContent from "@material-ui/core/CardContent";
+import moment from "moment";
 
 const drawerWidth = 300;
 
@@ -64,12 +65,18 @@ class Main extends Component {
     amount: 0,
     category: "",
     date: "",
+    income: true,
     budget: {},
     categoryRange: "",
     activePageHeader: "Dashboard",
     activePage: "Search",
     arrayForPieChart: [],
-    arrayForBudgetTable: []
+    arrayForBudgetTable: [],
+    arrayForSumByIncome: [],
+    budgetTotal: 0,
+    arrayForTrueIncome: [],
+    arrayForFalseIncome: [],
+    monthLabels: []
   };
 
   // Check login status on load
@@ -89,6 +96,10 @@ class Main extends Component {
       .then(res => {
         this.getCategorySum();
         this.getBudgetTable();
+        this.getBudgetSum();
+        this.getSumByMonthFalse();
+        this.getSumByMonthTrue();
+        this.createMonthLabels();
       })
       .catch(err => {
         console.log(err);
@@ -108,6 +119,28 @@ class Main extends Component {
     });
   };
 
+  getBudgetSum = () => {
+    API.getSumByIncome().then(res => {
+      console.log("BUDGET DATA" + JSON.stringify(res.data));
+
+      this.setState({ arrayForSumByIncome: res.data });
+      console.log(
+        "ARRAY FOR BUDGET SUM: " +
+          JSON.stringify(this.state.arrayForSumByIncome)
+      );
+
+      const budgetSumList = res.data.map(function(item) {
+        return item.budgetTotal;
+      });
+
+      let income = budgetSumList[0];
+      let expense = budgetSumList[1];
+      let budgetTotal = income - expense;
+
+      this.setState({ budgetTotal: budgetTotal });
+    });
+  };
+
   getCategorySum = () => {
     API.getSumByCategory().then(res => {
       // console.log("SUM BY CATEGORY DATA" + JSON.stringify(res.data));
@@ -122,6 +155,26 @@ class Main extends Component {
 
       this.setState({ arrayForPieChart: categorySumList });
       // console.log("ARRAY FOR PIE CHART: " + this.state.arrayForPieChart)
+    });
+  };
+
+  getSumByMonthTrue = () => {
+    API.getSumByMonthTrue().then(res => {
+      const arraySumTrue = res.data.map(function(item) {
+        return item.budgetTotal;
+      });
+      this.setState({ arrayForTrueIncome: arraySumTrue });
+      console.log(arraySumTrue + this.state.arrayForTrueIncome);
+    });
+  };
+
+  getSumByMonthFalse = () => {
+    API.getSumByMonthFalse().then(res => {
+      const arraySumFalse = res.data.map(function(item) {
+        return item.budgetTotal;
+      });
+      this.setState({ arrayForFalseIncome: arraySumFalse });
+      console.log(this.state.arrayForFalseIncome + arraySumFalse);
     });
   };
 
@@ -148,15 +201,20 @@ class Main extends Component {
       this.state.income &&
       this.state.category
     ) {
-      API.budgetPost({
+      let budgetObject = {
         description: this.state.description,
         amount: this.state.amount,
         date: this.state.date,
         income: this.state.income,
         category: this.state.category
-      })
+      };
+
+      this.setState({ budget: budgetObject });
+
+      API.budgetPost(budgetObject)
         .then(res => {
           console.log(res);
+          console.log("BUDGET STATE OBJECT: " + this.state.budget);
           // this.setState({
           //   description: "",
           //   amount: "",
@@ -191,6 +249,22 @@ class Main extends Component {
     return { highlight: incomeRow === "false" };
   };
 
+  createMonthLabels = () => {
+    const barChartLabels = [];
+
+    const thisMonth = moment().format("MMMM");
+    barChartLabels.push(thisMonth);
+
+    for (let i = 1; i < 6; i++) {
+      let newMonth = moment()
+        .add(i, "M")
+        .format("MMMM");
+      barChartLabels.push(newMonth);
+    }
+    console.log("MONTH LABELS: " + barChartLabels);
+    this.setState({ monthLabels: barChartLabels });
+  };
+
   render() {
     const pieData = {
       labels: ["Home", "Utilities"],
@@ -203,36 +277,34 @@ class Main extends Component {
       ]
     };
 
-    const radarData = {
-      labels: [
-        "Eating",
-        "Drinking",
-        "Sleeping",
-        "Designing",
-        "Coding",
-        "Cycling",
-        "Running"
-      ],
+    const barData = {
+      labels: this.state.monthLabels,
       datasets: [
         {
-          label: "My First dataset",
-          backgroundColor: "rgba(179,181,198,0.2)",
-          borderColor: "rgba(179,181,198,1)",
-          pointBackgroundColor: "rgba(179,181,198,1)",
-          pointBorderColor: "#fff",
-          pointHoverBackgroundColor: "#fff",
-          pointHoverBorderColor: "rgba(179,181,198,1)",
-          data: [65, 59, 90, 81, 56, 55, 40]
+          label: "Income",
+          backgroundColor: "#42A5F5",
+          data: this.state.arrayForTrueIncome
         },
         {
-          label: "My Second dataset",
+          label: "Expense",
+          backgroundColor: "#9CCC65",
+          data: this.state.arrayForFalseIncome
+        }
+      ]
+    };
+
+    const radarData = {
+      labels: ["Home", "Income", "Utilities"],
+      datasets: [
+        {
+          label: "Amount",
           backgroundColor: "rgba(255,99,132,0.2)",
           borderColor: "rgba(255,99,132,1)",
           pointBackgroundColor: "rgba(255,99,132,1)",
           pointBorderColor: "#fff",
           pointHoverBackgroundColor: "#fff",
           pointHoverBorderColor: "rgba(255,99,132,1)",
-          data: [28, 48, 40, 19, 96, 27, 100]
+          data: this.state.arrayForPieChart
         }
       ]
     };
@@ -279,7 +351,6 @@ class Main extends Component {
               <SideNav
                 activePage={this.state.activePage}
                 handleInputChange={this.handleInputChange}
-                bookQuery={this.state.bookQuery}
               />
             </Drawer>
           </Hidden>
@@ -294,7 +365,6 @@ class Main extends Component {
               <SideNav
                 activePage={this.state.activePage}
                 handleInputChange={this.handleInputChange}
-                bookQuery={this.state.bookQuery}
                 handleFormSubmit={this.handleFormSubmit}
               />
             </Drawer>
@@ -303,76 +373,120 @@ class Main extends Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
           <div className="row">
-            <div className="col-md-6">
-              <div className="content-section implementation">
-                <Chart type="pie" data={pieData} />
-              </div>
+            <div className="col">
+              <Grid container justify="center">
+                <Card className="total-sum">
+                  <CardContent style={{ marginBottom: -10 }}>
+                    <h3>DISPOSABLE INCOME: ${this.state.budgetTotal}</h3>
+                  </CardContent>
+                </Card>
+              </Grid>
             </div>
-            <div className="col-md-6">
-              <div className="content-section implementation">
-                <Chart type="radar" data={radarData} />
-              </div>
+          </div>
+            {/* BUDGET TABLE */}
+            <Card style={{ marginBottom: 20 }} className={classes.card}>
+              <CardContent>
+                <Typography
+                  className="dashtext"
+                  variant="p"
+                  color="textPrimary"
+                  gutterBottom
+                >
+                  Budget Table
+                </Typography>
+                <Typography
+                  className={classes.title}
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  Click on Date or Amount to sort
+                </Typography>
+                <DataTable
+                  className="budget-table"
+                  tableStyle={{ width: "100%" }}
+                  value={this.state.arrayForBudgetTable}
+                  rowClassName={this.rowClassName}
+                >
+                  <Column
+                    className="table-data"
+                    field="date"
+                    sortable="true"
+                    header="Date"
+                  />
+                  <Column
+                    className="table-data"
+                    field="description"
+                    header="Description"
+                  />
+                  <Column
+                    className="table-data"
+                    field="amount"
+                    sortable="true"
+                    header="Amount"
+                  />
+                  <Column
+                    className="table-data"
+                    field="category"
+                    header="Category"
+                  />
+                  <Column
+                    className="table-data"
+                    field="convertedIncome"
+                    header="Income"
+                  />
+                </DataTable>
+              </CardContent>
+            </Card>
+          <div className="row">
+            <div className="col-12">
+              <Grid container justify="center">
+                <Card
+                  style={{
+                    width: "80%",
+                    marginBottom: 20,
+                    justifyContent: "center"
+                  }}
+                >
+                  <CardContent>
+                    <div className="content-section implementation">
+                      <h3 className="text-center">Total by Category</h3>
+                      <Chart type="pie" data={pieData} />
+                    </div>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </div>
+            <div className="col-12">
+              <Grid container justify="center">
+                <Card style={{ width: "80%", marginBottom: 20 }}>
+                  <CardContent>
+                    <div className="content-section implementation">
+                      <h3 className="text-center">
+                        Income vs Expense By Month
+                      </h3>
+                      <Chart type="bar" data={barData} />
+                    </div>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </div>
+            <div className="col-12">
+              <Grid container justify="center">
+                <Card style={{ width: "80%", marginBottom: -20 }}>
+                  <CardContent>
+                    <div className="content-section implementation">
+                      <h3 className="text-center">Radar By Category</h3>
+                      <Chart type="radar" data={radarData} />
+                    </div>
+                  </CardContent>
+                </Card>
+              </Grid>
             </div>
           </div>
           <br />
           <br />
           <div className="row justify-content-center">
-            <div className="col-12">
-              {/* BUDGET TABLE */}
-              <Card className={classes.card}>
-                <CardContent>
-                  <Typography
-                    className="dashtext"
-                    variant="p"
-                    color="textPrimary"
-                    gutterBottom
-                  >
-                    Budget Table
-                  </Typography>
-                  <Typography
-                    className={classes.title}
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    Click on Date or Amount to sort
-                  </Typography>
-                  <DataTable
-                    className="budget-table"
-                    tableStyle={{ width: "100%" }}
-                    value={this.state.arrayForBudgetTable}
-                    rowClassName={this.rowClassName}
-                  >
-                    <Column
-                      className="table-data"
-                      field="date"
-                      sortable="true"
-                      header="Date"
-                    />
-                    <Column
-                      className="table-data"
-                      field="description"
-                      header="Description"
-                    />
-                    <Column
-                      className="table-data"
-                      field="amount"
-                      sortable="true"
-                      header="Amount"
-                    />
-                    <Column
-                      className="table-data"
-                      field="category"
-                      header="Category"
-                    />
-                    <Column
-                      className="table-data"
-                      field="convertedIncome"
-                      header="Income"
-                    />
-                  </DataTable>
-                </CardContent>
-              </Card>
-            </div>
+            <div className="col-12" />
           </div>
         </main>
       </div>

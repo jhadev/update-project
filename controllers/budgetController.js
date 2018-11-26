@@ -71,10 +71,45 @@ module.exports = {
         {
           $group: {
             _id: { income: "$income" },
-            budgetTotal: { $sum: "$amount" }
+            budgetTotal: { $sum: "$amount" },
+          
           }
         }
       ])
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
+  sumByMonthTrue: function(req, res) {
+    db.Budget
+      .aggregate(
+      [
+        { $match: { userID: req.user._id , income: {$eq: true} }},
+         {
+           $group : {
+              _id : { income: "$income", month: { $substrBytes: ["$date", 0, 2] }},
+              budgetTotal: { $sum: "$amount" }
+            
+           }
+         }
+      ]
+    )
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
+  sumByMonthFalse: function(req, res) {
+    db.Budget
+      .aggregate(
+      [
+        { $match: { userID: req.user._id , income: {$eq: false} }},
+         {
+           $group : {
+              _id : { income: "$income", month: { $substrBytes: ["$date", 0, 2] }},
+              budgetTotal: { $sum: "$amount" }
+            
+           }
+         }
+      ]
+    )
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },

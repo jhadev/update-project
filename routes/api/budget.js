@@ -35,6 +35,15 @@ router
   .route('/sumbycategory')
   .get(budgetController.sumByCategory)
 
+router
+  .route('/sumbymonthtrue')
+  .get(budgetController.sumByMonthTrue)
+
+router
+  .route('/sumbymonthfalse')
+  .get(budgetController.sumByMonthFalse)
+
+
 
 
 module.exports = router;

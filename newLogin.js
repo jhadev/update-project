@@ -4,6 +4,9 @@ import API from "../utils/API";
 import Navbar from "../components/Navbar";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
 
 class Login extends Component {
   state = {
@@ -47,39 +50,43 @@ class Login extends Component {
               <CardContent>
                 <form>
                   <h3>Login!</h3>
-                  <div className="form-group">
-                    <label htmlFor="username">Username</label>
-                    <input
-                      type="text"
-                      name="username"
-                      value={this.state.username}
-                      onChange={this.handleInputChange}
-                      className="form-control"
-                      placeholder="Username"
-                    />
-                    <small id="usernameHelp" className="form-text text-muted">
-                      Enter your username
-                    </small>
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input
-                      type="password"
-                      name="password"
-                      value={this.state.password}
-                      onChange={this.handleInputChange}
-                      className="form-control"
-                      placeholder="Password"
-                    />
-                  </div>
-
-                  <button
+                  <TextField
+                    id="standard-user"
+                    type="text"
+                    label="Username"
+                    className="user m-6"
+                    value={this.state.username}
+                    onChange={this.handleInputChange}
+                    margin="normal"
+                    name="username"
+                  />
+                  <TextField
+                    id="standard-pass"
+                    type="password"
+                    label="Password"
+                    className="pass"
+                    onChange={this.handleInputChange}
+                    value={this.state.password}
+                    margin="normal"
+                    name="password"
+                  />
+                  <Button
+                    /*disabled={
+              !(
+                props.description &&
+                props.amount &&
+                props.date &&
+                props.category
+              )
+            }*/
+                    variant="outlined"
+                    color="primary"
+                    className="submit-button"
                     type="submit"
-                    className="btn btn-success"
                     onClick={this.login}
                   >
                     Login
-                  </button>
+                  </Button>
                 </form>
               </CardContent>
             </Card>
