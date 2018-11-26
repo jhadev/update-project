@@ -65,6 +65,17 @@ class SideNav extends Component {
     this.setState({ [name]: value });
   };
 
+  logout = event => {
+    event.preventDefault();
+    API
+      .logout()
+      .then(res => {
+        console.log(res)
+        window.location.reload()
+      .catch(err => console.log(err));
+      })
+  }
+
   handleFormSubmit = event => {
     event.preventDefault();
     console.log("this");
@@ -138,6 +149,19 @@ class SideNav extends Component {
         curren$ee
       </Typography>
       <Divider />
+      <Grid className="logout" container justify="center">
+      <Button
+        variant="flat"
+        size="small"
+        color="secondary"
+        className="button"
+        type="submit"
+        onClick={this.logout}
+      >
+        Logout
+      </Button>
+      </Grid>
+      <Divider />
       <List>
         <Link to={`/search`}>
           <ListItem button>
@@ -158,7 +182,7 @@ class SideNav extends Component {
       </List>
       <Divider />
       <div className="container">
-      <h6 className="title">Input your budget items</h6>
+        <h6 className="title">Input your budget items</h6>
         <form
           noValidate
           autoComplete="off"
@@ -169,13 +193,14 @@ class SideNav extends Component {
         >
           <Grid className="allMargin" container justify="center">
             <TextField
-              id="standard-name"
+              id="standard-description"
               label="Description"
               className="textField"
               value={this.state.description}
               onChange={this.handleInputChange}
               margin="normal"
               name="description"
+              placeholder="Paycheck"
             />
             <TextField
               id="standard-amount"
@@ -184,6 +209,7 @@ class SideNav extends Component {
               onChange={this.handleInputChange}
               value={this.state.amount}
               margin="normal"
+              placeholder="100"
               name="amount"
             />
             <TextField
@@ -247,7 +273,7 @@ class SideNav extends Component {
           </Grid>
           <Grid className="allMargin" container justify="center">
             <Button
-              variant="outlined"
+              variant="contained"
               color="secondary"
               className="button"
               type="submit"

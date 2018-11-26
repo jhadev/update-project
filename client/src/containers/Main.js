@@ -49,7 +49,8 @@ const styles = theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3
+    padding: theme.spacing.unit * 3,
+    backgroundColor: "black"
   }
 });
 
@@ -230,6 +231,12 @@ class Main extends Component {
     this.setState({ monthLabels: barChartLabels });
   };
 
+  handleDrawerToggle = () => {
+    this.setState({
+      mobileOpen: !this.state.mobileOpen
+    });
+  };
+
   render() {
     const pieData = {
       labels: ["Health & Fitness", "Home", "Income", "Other", "Savings", "Shopping", "Travel", "Utilities"],
@@ -280,6 +287,8 @@ class Main extends Component {
     }
 
     const { classes, theme } = this.props;
+
+    
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -363,7 +372,7 @@ class Main extends Component {
                   color="textSecondary"
                   gutterBottom
                 >
-                  Click on Date or Amount to sort
+                  Click on headers to sort
                 </Typography>
                 <DataTable
                   className="budget-table"
@@ -381,6 +390,7 @@ class Main extends Component {
                     className="table-data"
                     field="description"
                     header="Description"
+                    sortable="true"
                   />
                   <Column
                     className="table-data"
@@ -388,16 +398,19 @@ class Main extends Component {
                     sortable="true"
                     header="Amount"
                     body={this.amountTemplate}
+                    sortable="true"
                   />
                   <Column
                     className="table-data"
                     field="category"
                     header="Category"
+                    sortable="true"
                   />
                   <Column
                     className="table-data"
                     field="convertedIncome"
                     header="Income"
+                    sortable="true"
                   />
                 </DataTable>
               </CardContent>

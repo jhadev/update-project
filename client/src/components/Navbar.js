@@ -8,7 +8,7 @@ const Navbar = () => (
       <Link className="navbar-brand" to="/">
         curren$ee
       </Link>
-      <div className="collapse navbar-collapse">
+      <div className="navbar">
         <div className="navbar-nav">
           <li className="nav-item active">
             <NavLink className=" font nav-item nav-link" to="/">
