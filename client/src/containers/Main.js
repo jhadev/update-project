@@ -274,7 +274,7 @@ class Main extends Component {
 
   render() {
     const pieData = {
-      labels: ["Home", "Utilities"],
+      labels: ["Health & Fitness", "Home", "Income", "Other", "Savings", "Shopping", "Travel", "Utilities"],
       datasets: [
         {
           data: this.state.arrayForPieChart,
@@ -301,7 +301,7 @@ class Main extends Component {
     };
 
     const radarData = {
-      labels: ["Home", "Income", "Utilities"],
+      labels: ["Health & Fitness", "Home", "Income", "Other", "Savings", "Shopping", "Travel", "Utilities"],
       datasets: [
         {
           label: "Amount",
@@ -357,7 +357,7 @@ class Main extends Component {
             >
               <SideNav
                 activePage={this.state.activePage}
-                handleInputChange={this.handleInputChange}
+               
               />
             </Drawer>
           </Hidden>
@@ -371,8 +371,7 @@ class Main extends Component {
             >
               <SideNav
                 activePage={this.state.activePage}
-                handleInputChange={this.handleInputChange}
-                handleFormSubmit={this.handleFormSubmit}
+              
               />
             </Drawer>
           </Hidden>
