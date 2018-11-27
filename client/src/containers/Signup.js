@@ -48,7 +48,7 @@ class Login extends Component {
             <Card className="login-card">
               <CardContent>
                 <form>
-                  <h3 className="font">Sign Up</h3>
+                  <h3 className="logFont">Sign Up</h3>
                   <div className="form-group">
                     <label htmlFor="username">Username</label>
                     <input
