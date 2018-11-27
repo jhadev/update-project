@@ -398,7 +398,6 @@ class Main extends Component {
                     sortable="true"
                     header="Amount"
                     body={this.amountTemplate}
-                    sortable="true"
                   />
                   <Column
                     className="table-data"
