@@ -22,8 +22,7 @@ module.exports = {
           userID: 1,
           month: { $substrBytes: ["$date", 0, 2] },
           convertedIncome: { $toString: "$income" }
-        },
-
+        }
       }
     ])
       .then(dbModel => res.json(dbModel))
@@ -65,91 +64,96 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   sumByIncome: function(req, res) {
-    db.Budget
-      .aggregate([
-        { $match: { userID: req.user._id } },
-        {
-          $group: {
-            _id: { income: "$income" },
-            budgetTotal: { $sum: "$amount" },
-          
-          }
+    db.Budget.aggregate([
+      { $match: { userID: req.user._id } },
+      {
+        $group: {
+          _id: { income: "$income" },
+          budgetTotal: { $sum: "$amount" }
         }
-      ])
+      }
+    ])
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
   sumByMonthTrue: function(req, res) {
-    db.Budget
-      .aggregate(
-      [
-        { $match: { userID: req.user._id , income: {$eq: true} }},
-         {
-           $group : {
-              _id : { income: "$income", month: { $substrBytes: ["$date", 0, 2] }},
-              budgetTotal: { $sum: "$amount" }
-            
-           }
-         }
-      ]
-    )
+    db.Budget.aggregate([
+      { $match: { userID: req.user._id, income: { $eq: true } } },
+      {
+        $group: {
+          _id: { income: "$income", month: { $substrBytes: ["$date", 0, 2] } },
+          budgetTotal: { $sum: "$amount" }
+        }
+      }
+    ])
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
   sumByMonthFalse: function(req, res) {
-    db.Budget
-      .aggregate(
-      [
-        { $match: { userID: req.user._id , income: {$eq: false} }},
-         {
-           $group : {
-              _id : { income: "$income", month: { $substrBytes: ["$date", 0, 2] }},
-              budgetTotal: { $sum: "$amount" }
-            
-           }
-         }
-      ]
-    )
+    db.Budget.aggregate([
+      { $match: { userID: req.user._id, income: { $eq: false } } },
+      {
+        $group: {
+          _id: { income: "$income", month: { $substrBytes: ["$date", 0, 2] } },
+          budgetTotal: { $sum: "$amount" }
+        }
+      }
+    ])
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
   sumByMonth: function(req, res) {
-    db.Budget
-      .aggregate(
-      [
-        { $match: { userID: req.user._id } },
-         {
-           $group : {
-              _id : { income: "$income" , month: { $substrBytes: ["$date", 0, 2] }},
-              budgetTotal: { $sum: "$amount" }
-           }
-         }
-      ]
-    )
+    db.Budget.aggregate([
+      { $match: { userID: req.user._id } },
+      {
+        $group: {
+          _id: { income: "$income", month: { $substrBytes: ["$date", 0, 2] } },
+          budgetTotal: { $sum: "$amount" }
+        }
+      }
+    ])
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
   sumByCategory: function(req, res) {
     db.Budget.aggregate([
       { $match: { userID: req.user._id } },
-      { $sort : { category: -1 } },
-       {
-         $group : {
-            _id : { income: "$income" , category: "$category", month: { $substrBytes: ["$date", 0, 2] }},
-            categoryTotal: { $sum: "$amount" }
-         }
-       }
+      {
+        $group: {
+          _id: {
+            income: "$income",
+            category: "$category",
+            month: { $substrBytes: ["$date", 0, 2] }
+          },
+          categoryTotal: { $sum: "$amount" }
+        }
+      },
+      { $sort: {
+        '_id.category': 1, 
+      } }
+    ])
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
+  sumByCategory1: function(req, res) {
+    db.Budget.aggregate([
+      { $match: { userID: req.user._id } },
+      { $sort: { category: -1 } },
+      {
+        $project: {
+          amount: 1,
+          description: 1,
+          income: 1,
+          category: 1,
+          date: 1,
+          userID: 1,
+          month: { $substrBytes: ["$date", 0, 2] },
+          convertedIncome: { $toString: "$income" },
+          categoryTotal: { sum: "$amount" }
+        }
+      }
     ])
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   }
 };
-
-
-
-
-
-
-
-
-
